@@ -1,4 +1,4 @@
-## ElectroGrid
+# ElectroGrid
 
 ### Contribution Guide
 
