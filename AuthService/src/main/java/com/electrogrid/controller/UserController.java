@@ -1,5 +1,6 @@
 package com.electrogrid.controller;
 
+import com.electrogrid.entity.Credentials;
 import com.electrogrid.entity.User;
 import com.electrogrid.service.AuthServiceI;
 import com.electrogrid.service.AuthServiceImpl;
@@ -29,6 +30,15 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response insertUser(User user) {
         return authService.insertUser(user);
+    }
+
+    @PermitAll
+    @POST
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response login(Credentials credentials) {
+        return authService.login(credentials);
     }
 
 }
