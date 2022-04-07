@@ -6,10 +6,8 @@ import com.electrogrid.service.AuthServiceI;
 import com.electrogrid.service.AuthServiceImpl;
 
 import javax.annotation.security.PermitAll;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -39,6 +37,22 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(Credentials credentials) {
         return authService.login(credentials);
+    }
+
+    @RolesAllowed("Admin")
+    @PUT
+    @Path("/update/{id}/{newRole}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateRole(@PathParam("id") int id, @PathParam("newRole") String newRole) {
+        return authService.updateUserRole(id, newRole);
+    }
+
+    @RolesAllowed("Admin")
+    @DELETE
+    @Path("/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteUser(@PathParam("id") int id) {
+        return authService.deleteUser(id);
     }
 
 }
