@@ -137,10 +137,10 @@ public class AuthServiceImpl implements AuthServiceI {
     }
 
     @Override
-    public Response updateUserRole(int id, String newRole) {
+    public Response updateUserRole(User user) {
         Response response = null;
 
-        if (!isUserExistById(id)) {
+        if (!isUserExistById(user.getId())) {
             ObjectNode json = mapper.createObjectNode();
             json.put("error", "User not found !!!");
 
@@ -156,8 +156,8 @@ public class AuthServiceImpl implements AuthServiceI {
 
                 PreparedStatement stmt = conn.prepareStatement(query);
 
-                stmt.setString(1, newRole);
-                stmt.setInt(2,id);
+                stmt.setString(1, user.getRole());
+                stmt.setInt(2,user.getId());
 
                 stmt.executeUpdate();
 
