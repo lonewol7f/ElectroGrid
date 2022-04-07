@@ -16,7 +16,7 @@ import java.util.Set;
  * Date: 3/17/2022
  */
 
-@ApplicationPath("/")
+@ApplicationPath("/auth")
 public class Config extends Application {
 
     public static final String DB_PROPERTIES_FILE = "db.properties";
