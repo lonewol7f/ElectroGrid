@@ -42,6 +42,7 @@ public class SecurityFilter implements ContainerRequestFilter {
 
                 containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
                         .entity("Access denied for all users !!!").build());
+                return;
 
             }
 
@@ -50,10 +51,10 @@ public class SecurityFilter implements ContainerRequestFilter {
 
             if (authorization == null || authorization.isEmpty()) {
                 containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                        .entity("You can not access this resource !!!").build());
+                        .entity("You can not access this resource 1 !!!").build());
+                return;
             }
 
-            assert authorization != null;
             final String authToken = authorization.get(0).replaceFirst(AUTHENTICATION_HEADER_PREFIX, "");
             final String decodedAuthToken = new String(Base64.getDecoder().decode(authToken.getBytes(StandardCharsets.UTF_8)));
 
@@ -67,7 +68,8 @@ public class SecurityFilter implements ContainerRequestFilter {
 
                 if (!AuthUser.isUserAllowed(username, password, roleSet)) {
                     containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                            .entity("You can not access this resource !!!").build());
+                            .entity("You can not access this resource 2 !!!").build());
+
                 }
             }
         }
