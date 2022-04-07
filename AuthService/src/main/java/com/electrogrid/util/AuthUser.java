@@ -24,7 +24,7 @@ public class AuthUser {
         try {
             Connection conn = DBUtil.connect();
 
-            String query = "SELECT * FROM users WHERE username = ?";
+            String query = "SELECT * FROM users WHERE email = ?";
 
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setString(1, username);
@@ -32,7 +32,7 @@ public class AuthUser {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                user = rs.getString("username");
+                user = rs.getString("email");
                 pwd = rs.getString("password");
                 role = rs.getString("role");
             }
