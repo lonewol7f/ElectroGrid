@@ -2,18 +2,21 @@ package com.electrogrid.service;
 
 import com.electrogrid.entity.Credentials;
 import com.electrogrid.entity.User;
+import com.electrogrid.util.AuthUser;
 import com.electrogrid.util.DBUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.mindrot.jbcrypt.BCrypt;
 
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Base64;
+import java.util.*;
 
 /**
  * Created By lonewol7f
@@ -76,6 +79,7 @@ public class AuthServiceImpl implements AuthServiceI {
         return response;
     }
 
+
     @Override
     public Response login(Credentials credentials) {
 
@@ -136,6 +140,7 @@ public class AuthServiceImpl implements AuthServiceI {
         return response;
     }
 
+
     @Override
     public Response updateUserRole(User user) {
         Response response = null;
@@ -157,7 +162,7 @@ public class AuthServiceImpl implements AuthServiceI {
                 PreparedStatement stmt = conn.prepareStatement(query);
 
                 stmt.setString(1, user.getRole());
-                stmt.setInt(2,user.getId());
+                stmt.setInt(2, user.getId());
 
                 stmt.executeUpdate();
 
@@ -177,6 +182,7 @@ public class AuthServiceImpl implements AuthServiceI {
 
         return response;
     }
+
 
     @Override
     public Response deleteUser(int id) {
@@ -219,6 +225,7 @@ public class AuthServiceImpl implements AuthServiceI {
         return response;
     }
 
+
     @Override
     public boolean isUserExist(String email) {
 
@@ -247,6 +254,7 @@ public class AuthServiceImpl implements AuthServiceI {
         return flag;
     }
 
+
     @Override
     public boolean isUserExistById(int id) {
 
@@ -273,5 +281,53 @@ public class AuthServiceImpl implements AuthServiceI {
         }
 
         return flag;
+    }
+
+
+    @Override
+    public Response validate(ContainerRequestContext containerRequestContext) {
+
+        final MultivaluedMap<String, String> headers = containerRequestContext.getHeaders();
+        final List<String> authorization = headers.get("Authorization");
+        final List<String> roles = headers.get("Roles");
+
+
+        if (roles == null || roles.isEmpty()) {
+            return Response.status(Response.Status.OK)
+                    .header("Allowed", true)
+                    .build();
+        }
+
+        if (authorization == null || authorization.isEmpty()) {
+            return Response.status(Response.Status.OK)
+                    .header("Allowed", false)
+                    .build();
+        }
+
+        final String authToken = authorization.get(0).replaceFirst("Basic ", "");
+        final String decodedAuthToken = new String(Base64.getDecoder().decode(authToken.getBytes(StandardCharsets.UTF_8)));
+
+        final StringTokenizer tokenizer = new StringTokenizer(decodedAuthToken, ":");
+        final String username = tokenizer.nextToken();
+        final String password = tokenizer.nextToken();
+
+        String rolesListStr = roles.get(0);
+        String cleanRoleList = rolesListStr.replaceAll("\\[", "");
+        cleanRoleList = cleanRoleList.replaceAll("\\]", "");
+        cleanRoleList = cleanRoleList.replaceAll(" ", "");
+        
+        Set<String> roleList = new HashSet<>(Arrays.asList(cleanRoleList.split(",")));
+
+
+
+        if (!AuthUser.isUserAllowed(username, password, roleList)) {
+            return Response.status(Response.Status.OK)
+                    .header("Allowed", false)
+                    .build();
+        }
+
+        return Response.status(Response.Status.OK)
+                .header("Allowed", true)
+                .build();
     }
 }
