@@ -8,6 +8,7 @@ import com.electrogrid.service.AuthServiceImpl;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -20,6 +21,7 @@ import javax.ws.rs.core.Response;
 public class UserController {
 
     private final AuthServiceI authService = new AuthServiceImpl();
+
 
     @PermitAll
     @POST
@@ -41,10 +43,11 @@ public class UserController {
 
     @RolesAllowed("Admin")
     @PUT
-    @Path("/update/{id}/{newRole}")
+    @Path("/update")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateRole(@PathParam("id") int id, @PathParam("newRole") String newRole) {
-        return authService.updateUserRole(id, newRole);
+    public Response updateRole(User user) {
+        return authService.updateUserRole(user);
     }
 
     @RolesAllowed("Admin")
@@ -53,6 +56,14 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteUser(@PathParam("id") int id) {
         return authService.deleteUser(id);
+    }
+
+    @PermitAll
+    @GET
+    @Path("/validate")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response test(ContainerRequestContext containerRequestContext) {
+        return authService.validate(containerRequestContext);
     }
 
 }
