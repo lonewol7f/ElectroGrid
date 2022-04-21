@@ -15,6 +15,7 @@ public interface AuthServiceI {
     Response login(Credentials credentials);
     Response updateUserRole(User user);
     Response deleteUser(int id);
+    Object getUserById(int id);
     boolean isUserExist(String email);
     boolean isUserExistById(int id);
     Response validate(ContainerRequestContext containerRequestContext);
