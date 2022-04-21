@@ -60,6 +60,14 @@ public class UserController {
 
     @PermitAll
     @GET
+    @Path("/user/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Object getUserById(@PathParam("id") int id) {
+        return authService.getUserById(id);
+    }
+
+    @PermitAll
+    @GET
     @Path("/validate")
     @Produces({MediaType.APPLICATION_JSON})
     public Response test(ContainerRequestContext containerRequestContext) {
