@@ -21,7 +21,8 @@ public class ConnectionRequest {
         return con;
     }
 
-    //Insert a connection request
+
+    //Insert connection request
     public String insertConnRequest(String nicNo , String firstName , String lastName , String address , String tpNo) {
 
         String output = "";
