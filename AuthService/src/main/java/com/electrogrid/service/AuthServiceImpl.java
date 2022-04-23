@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthServiceI {
             if (isUserExist(email)) {
                 ObjectNode json = mapper.createObjectNode();
                 json.put("error", "User already exist");
-                return Response.status(Response.Status.CREATED)
+                return Response.status(Response.Status.EXPECTATION_FAILED)
                         .entity(json).build();
             }
 
@@ -89,7 +89,7 @@ public class AuthServiceImpl implements AuthServiceI {
             ObjectNode json = mapper.createObjectNode();
             json.put("error", "User not found !!!");
 
-            return Response.status(Response.Status.CREATED)
+            return Response.status(Response.Status.NOT_FOUND)
                     .entity(json).build();
         }
 
@@ -149,7 +149,7 @@ public class AuthServiceImpl implements AuthServiceI {
             ObjectNode json = mapper.createObjectNode();
             json.put("error", "User not found !!!");
 
-            return Response.status(Response.Status.CREATED)
+            return Response.status(Response.Status.NOT_FOUND)
                     .entity(json).build();
         }
 
@@ -192,7 +192,7 @@ public class AuthServiceImpl implements AuthServiceI {
             ObjectNode json = mapper.createObjectNode();
             json.put("error", "User not found !!!");
 
-            return Response.status(Response.Status.CREATED)
+            return Response.status(Response.Status.NOT_FOUND)
                     .entity(json).build();
         }
 
@@ -225,6 +225,55 @@ public class AuthServiceImpl implements AuthServiceI {
         return response;
     }
 
+    @Override
+    public Object getUserById(int id) {
+
+        Response response = null;
+
+        if (!isUserExistById(id)) {
+            ObjectNode json = mapper.createObjectNode();
+            json.put("error", "User not found !!!");
+
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(json).build();
+        }
+
+        try {
+
+            Connection conn = DBUtil.connect();
+
+            if (conn != null) {
+                String query = "SELECT * FROM users WHERE id = ?";
+
+                PreparedStatement stmt = conn.prepareStatement(query);
+
+                stmt.setInt(1, id);
+
+                ResultSet rs = stmt.executeQuery();
+                User user = null;
+                if (rs.next()){
+                    user = new User();
+
+                    user.setId(rs.getInt("id"));
+                    user.setFirstName(rs.getString("firstName"));
+                    user.setLastName(rs.getString("lastName"));
+                    user.setEmail(rs.getString("email"));
+                    user.setRole(rs.getString("role"));
+                    user.setPassword(rs.getString("password"));
+                }
+
+                return user;
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            ObjectNode json = mapper.createObjectNode();
+            json.put("error", e.getMessage());
+            response = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(json).build();
+        }
+
+        return response;
+    }
 
     @Override
     public boolean isUserExist(String email) {
