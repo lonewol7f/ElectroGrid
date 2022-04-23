@@ -19,7 +19,7 @@ public class MyResource {
      */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() {
+    public java.lang.String getIt() {
         return "Got it!";
     }
 }
