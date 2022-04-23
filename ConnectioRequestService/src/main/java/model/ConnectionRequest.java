@@ -22,7 +22,7 @@ public class ConnectionRequest {
     }
 
 
-    //Insert connection request
+    //Insert a connection request
     public String insertConnRequest(String nicNo , String firstName , String lastName , String address , String tpNo) {
 
         String output = "";
