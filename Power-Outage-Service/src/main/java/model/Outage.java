@@ -113,6 +113,57 @@ public class Outage {
 			return output;
 		}
 		
-		
+		//update
+				public String updateOutage(String outid , int cusid , String cusname , String outarea ,String outdate, String outtime ,String outdesc) {
+					
+					String output = ""; 
+					
+					try {
+						
+						Connection con = DBConnect.connect(); 
+						
+						if (con == null){
+							
+							return "Error while connecting to the database for updating."; 
+						} 
+						
+						 // create a prepared statement
+						 String query = "UPDATE outage SET cusID=?,cusName=?,outArea=?,outDate=?,outTime=?,outDesc=? WHERE outageID=?";
+						 
+						 PreparedStatement preparedStmt = con.prepareStatement(query); 
+						 
+						 // binding values
+						 //preparedStmt.setString(1, code); 
+						 //preparedStmt.setString(2, name); 
+						 //preparedStmt.setDouble(3, Double.parseDouble(price)); 
+						 //preparedStmt.setString(4, desc); 
+						 //preparedStmt.setInt(5, Integer.parseInt(ID)); 
+
+			                     
+					         preparedStmt.setInt(1, cusid); 
+					         preparedStmt.setString(2, cusname); 
+					         preparedStmt.setString(3, outarea);
+					         preparedStmt.setString(4, outdate);
+					         preparedStmt.setString(5, outtime);
+			                 preparedStmt.setString(6, outdesc);
+			                 preparedStmt.setInt(7, Integer.parseInt(outid)); 
+						 
+						 // execute the statement
+						 preparedStmt.execute(); 
+						 
+						 con.close(); 
+						 
+						 output = "Updated successfully";
+						
+					}catch(Exception e) {
+						
+						output = "Error while updating the outage."; 
+						System.err.println(e.getMessage()); 
+						
+					}
+					
+					return output;
+				}
+				
 	
 }
