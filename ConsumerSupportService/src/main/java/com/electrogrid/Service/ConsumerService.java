@@ -1,7 +1,7 @@
 package com.electrogrid.Service;
 
-import com.electrogrid.dbaccess.ConsumerDBAccess;
-import com.electrogrid.entity.Consumer;
+import com.electrogrid.dbaccess.QuestionDBAccess;
+import com.electrogrid.entity.Question;
 import com.electrogrid.util.DBConnect;
 
 import javax.ws.rs.*;
@@ -10,11 +10,12 @@ import javax.ws.rs.core.Response;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 
 @Path("")
 public class ConsumerService {
 
-    private final ConsumerDBAccess consumerDBAccess = new ConsumerDBAccess();
+    private final QuestionDBAccess questionDBAccess = new QuestionDBAccess();
 
     @GET
     @Path("/test")
@@ -38,8 +39,38 @@ public class ConsumerService {
     @Path("/insert")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addQuestion(Consumer consumer) {
-        return consumerDBAccess.addQuestion(consumer);
+    public Response addQuestion(Question question) {
+        return questionDBAccess.addQuestion(question);
     }
+
+    @GET
+    @Path("questions/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Question getQuestionById(@PathParam("id") int qid) {
+        return questionDBAccess.getQuestionById(qid);
+    }
+
+    @PUT
+    @Path("/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateQuestion(Question question) {
+        return questionDBAccess.updateQuestion(question);
+    }
+
+    @DELETE
+    @Path("/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteQuestion(@PathParam("id") int qid) {
+        return questionDBAccess.deleteQuestion(qid);
+    }
+
+    @GET
+    @Path("/list-all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Question> listQuestions(){
+        return questionDBAccess.listQuestions();
+    }
+
 
 }
