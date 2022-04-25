@@ -336,10 +336,13 @@ public class AuthServiceImpl implements AuthServiceI {
     @Override
     public Response validate(ContainerRequestContext containerRequestContext) {
 
+        System.out.println("here");
+
         final MultivaluedMap<String, String> headers = containerRequestContext.getHeaders();
         final List<String> authorization = headers.get("Authorization");
         final List<String> roles = headers.get("Roles");
 
+        System.out.println(authorization);
 
         if (roles == null || roles.isEmpty()) {
             return Response.status(Response.Status.OK)

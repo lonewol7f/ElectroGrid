@@ -5,9 +5,13 @@
     <servlet>
         <servlet-name>Jersey Web Application</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+<!--        <init-param>-->
+<!--            <param-name>jersey.config.server.provider.packages</param-name>-->
+<!--            <param-value>com.electrogrid</param-value>-->
+<!--        </init-param>-->
         <init-param>
-            <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>com.electrogrid</param-value>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>com.electrogrid.config.JerseyApplication</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -15,4 +19,12 @@
         <servlet-name>Jersey Web Application</servlet-name>
         <url-pattern>/consumer-service/*</url-pattern>
     </servlet-mapping>
+<!--    <filter>-->
+<!--        <filter-name>security-filter</filter-name>-->
+<!--        <filter-class>com.electrogrid.security.SecurityFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>security-filter</filter-name>-->
+<!--        <url-pattern>/consumer-service/*</url-pattern>-->
+<!--    </filter-mapping>-->
 </web-app>
