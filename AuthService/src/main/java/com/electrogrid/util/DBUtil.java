@@ -14,8 +14,8 @@ public class DBUtil {
 
     private static Connection connection;
     private static final String url = Config.properties.getProperty("db.url");
-    public static final String username = Config.properties.getProperty("db.username");
-    public static final String password = Config.properties.getProperty("db.password");
+    private static final String username = Config.properties.getProperty("db.username");
+    private static final String password = Config.properties.getProperty("db.password");
 
     private DBUtil() {
 
