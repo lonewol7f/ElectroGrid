@@ -5,6 +5,7 @@ import com.electrogrid.entity.User;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Created By lonewol7f
@@ -16,6 +17,7 @@ public interface AuthServiceI {
     Response updateUserRole(User user);
     Response deleteUser(int id);
     Object getUserById(int id);
+    List<User> listUsers();
     boolean isUserExist(String email);
     boolean isUserExistById(int id);
     Response validate(ContainerRequestContext containerRequestContext);
