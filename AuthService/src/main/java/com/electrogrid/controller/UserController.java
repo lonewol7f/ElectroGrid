@@ -11,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Created By lonewol7f
@@ -64,6 +65,14 @@ public class UserController {
     @Produces(MediaType.APPLICATION_JSON)
     public Object getUserById(@PathParam("id") int id) {
         return authService.getUserById(id);
+    }
+
+    @PermitAll
+    @GET
+    @Path("/list")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> listUsers() {
+        return authService.listUsers();
     }
 
     @PermitAll

@@ -276,6 +276,43 @@ public class AuthServiceImpl implements AuthServiceI {
     }
 
     @Override
+    public List<User> listUsers() {
+
+        List<User> userList = new ArrayList<>();
+
+        try {
+
+            Connection conn = DBUtil.connect();
+
+            if (conn != null) {
+                String query = "SELECT * FROM users";
+
+                PreparedStatement stmt = conn.prepareStatement(query);
+
+                ResultSet rs = stmt.executeQuery();
+                User user = null;
+                if (rs.next()){
+                    user = new User();
+
+                    user.setId(rs.getInt("id"));
+                    user.setFirstName(rs.getString("firstName"));
+                    user.setLastName(rs.getString("lastName"));
+                    user.setEmail(rs.getString("email"));
+                    user.setRole(rs.getString("role"));
+                    user.setPassword(rs.getString("password"));
+
+                    userList.add(user);
+                }
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return userList;
+    }
+
+    @Override
     public boolean isUserExist(String email) {
 
         boolean flag = true;
@@ -336,10 +373,13 @@ public class AuthServiceImpl implements AuthServiceI {
     @Override
     public Response validate(ContainerRequestContext containerRequestContext) {
 
+        System.out.println("here");
+
         final MultivaluedMap<String, String> headers = containerRequestContext.getHeaders();
         final List<String> authorization = headers.get("Authorization");
         final List<String> roles = headers.get("Roles");
 
+        System.out.println(authorization);
 
         if (roles == null || roles.isEmpty()) {
             return Response.status(Response.Status.OK)

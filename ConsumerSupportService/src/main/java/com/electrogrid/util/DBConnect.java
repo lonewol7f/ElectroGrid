@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class DBConnect {
 
     public static Connection connection;
-    public static final String USERNAME = "root";
-    public static final String URL = "jdbc:mysql://localhost:3306/pafpoject";
-    public static final String PASSWORD = "";
+    public static final String USERNAME = "paf_user";
+    public static final String URL = "jdbc:mysql://localhost:3306/consumer-support-service";
+    public static final String PASSWORD = "PAF_user";
 
     public DBConnect() {
     }
